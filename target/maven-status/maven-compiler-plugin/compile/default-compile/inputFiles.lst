@@ -1,3 +1,4 @@
 /app/src/main/java/com/example/MenuService/Kafka/KafkaService.java
 /app/src/main/java/com/example/MenuService/Kafka/KafkaController.java
+/app/src/main/java/com/example/MenuService/Kafka/KafkaConfiguration.java
 /app/src/main/java/com/example/MenuService/MenuServiceApplication.java
