@@ -1,5 +1,7 @@
-com/example/MenuService/Kafka/KafkaController.class
 com/example/MenuService/Kafka/KafkaConfiguration.class
 com/example/MenuService/Kafka/KafkaConsumer.class
-com/example/MenuService/MenuServiceApplication.class
 com/example/MenuService/Kafka/KafkaService.class
+com/example/MenuService/AI/OllamaService.class
+com/example/MenuService/MenuServiceApplication.class
+com/example/MenuService/Kafka/MessageWithId.class
+com/example/MenuService/Kafka/MessageWithIdSerializer.class
