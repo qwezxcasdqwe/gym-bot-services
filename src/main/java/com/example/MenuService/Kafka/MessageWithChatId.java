@@ -1,10 +1,10 @@
 package com.example.MenuService.Kafka;
 
-public class MessageWithId {
+public class MessageWithChatId {
   private Long chatId;
   private String message;
 
-  public MessageWithId(Long chatId, String message) {
+  public MessageWithChatId(Long chatId, String message) {
       this.chatId = chatId;
       this.message = message;
   }

@@ -4,12 +4,12 @@ import org.apache.kafka.common.serialization.Serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
-public class MessageWithIdSerializer implements Serializer<MessageWithId> {
+public class MessageWithIdSerializer implements Serializer<MessageWithChatId> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public byte[] serialize(String topic, MessageWithId data) {
+    public byte[] serialize(String topic, MessageWithChatId data) {
         try {
             return objectMapper.writeValueAsBytes(data);
         } catch (Exception e) {
