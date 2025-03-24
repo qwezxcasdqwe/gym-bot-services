@@ -1,0 +1,39 @@
+{
+  "name": "gym_bot",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "web",
+  "workspaceFolder": "/app",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+      "vscode": {
+          "extensions": [
+              "vscjava.vscode-java-pack", 
+              "redhat.java", 
+              "vscjava.vscode-maven", 
+              "springio.spring-boot-tools", 
+              "pivotal.vscode-boot-dev-pack",
+              "dbaeumer.vscode-eslint", 
+              "eamodio.gitlens", 
+              "ms-vscode.vscode-java-dependency",
+              "ms-vscode.vscode-java-test",
+              "vscjava.vscode-spring-initializr"
+          ],
+          "settings": {
+              "java.home": "/opt/java/openjdk", // Укажите корневую папку JDK
+              "java.configuration.runtimes": [
+                  {
+                      "name": "JavaSE-21",
+                      "path": "/opt/java/openjdk" // Путь к JDK
+                  }
+              ],
+              "maven.executable.path": "/usr/local/bin/mvn", // Проверьте, что этот путь правильный
+              "java.import.gradle.enabled": true,
+              "java.import.maven.enabled": true,
+              "java.debug.settings.console": "internalConsole",
+              "editor.insertSpaces": true,
+              "editor.tabSize": 2,
+              "java.configuration.updateBuildConfiguration": "automatic"
+          }
+      }
+  }
+}

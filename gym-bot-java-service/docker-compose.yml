@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  app: &backend
+    build: ./gym-bot
+    entrypoint: sh ./docker-entrypoint.sh
+    env_file:
+      - ./gym-bot/.env
+    depends_on:
+      - db
+
+  web:
+    <<: *backend
+    command: sleep infinity
+    restart: always
+    ports:
+      - "127.0.0.1:${PORT_EXTERNAL}:8080"
+    networks:
+      - default
+
+  microservice:
+    command: sleep infinity
+    restart: always
+    build:
+      context: ./menu-microservice
+    env_file:
+      - ./menu-microservice/.env
+    ports:
+      - "127.0.0.1:${PORT_EXTERNAL}:8081"
+    networks:
+      - default
+    depends_on:
+      - db    
+
+  zookeeper:
+    image: zookeeper
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092       
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  
+  db:
+    image: timescale/timescaledb:2.17.2-pg16
+    restart: always
+    env_file:
+      - ./gym-bot/.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  python-web:
+    command: sleep infinity
+    restart: always 
+    build:
+     context: ./python-web
+    env_file: 
+        - ./python-web/.env
+    ports:
+      - "127.0.0.1:${PORT_EXTERNAL}:8081"
+    networks:
+      - default
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    env_file:
+      - ./frontend/.env 
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT}:8081"  
+    networks: 
+        - default
+    depends_on:
+      - db
+      - python-web
+
+
+
+
+volumes:
+  pg_data:
+  

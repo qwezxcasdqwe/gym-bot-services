@@ -1,0 +1,19 @@
+# Ignore build artifacts and compiled files
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Ignore generated files during the project work
+.settings
+target/*
+
+# Ignore IDE configuration files and local settings
+.vscode/
+.idea
+
+# Ignore sensitive and local configuration files
+.env
+
+# Ignore generated annotation files
+.apt_generated
