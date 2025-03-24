@@ -1,0 +1,16 @@
+{
+  "name": "python-web",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "python-web",
+  "workspaceFolder": "/app",
+  "shutdownAction": "stopCompose",
+  "settings": {
+    "python.pythonPath": "/usr/local/bin/python"  // Путь до интерпретатора Python
+  },
+  "extensions": [
+    "ms-python.python",  // Расширение для работы с Python в VS Code
+    "ms-python.vscode-pylance"  // Для автодополнений
+  ],
+  "forwardPorts": [5000],  // Если приложение работает на порту 5000 (например, Flask)
+  "postCreateCommand": "pip install -r requirements.txt"  // Устанавливаем зависимости после создания контейнера
+}
