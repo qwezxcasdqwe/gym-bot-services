@@ -18,9 +18,8 @@ public class KafkaService {
     public void sendMessage(MessageWithChatId messageWithChatId) {
       log.info("kafka получил запрос на отправление в бота " + messageWithChatId.getMessage());
       kafkaTemplateMessage.send("menu-service", messageWithChatId);
-      log.info("✅ Сообщение успешно отправлено в Kafka с chatId: {}", messageWithChatId.getChatId());
+      log.info("✅ Сообщение успешно отправлено в Kafka с chatId {}", messageWithChatId.getChatId());
   }
     
   }
   
-
