@@ -1,0 +1,17 @@
+{
+  "name": "React Frontend Container",
+  "dockerFile": "../Dockerfile",
+  "context": "..",
+  "service": "frontend",
+  "workspaceMount": "source=${localWorkspaceFolder}/frontend,target=/app,type=bind",
+  "workspaceFolder": "/app",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "editor.formatOnSave": true
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next"
+  ],
+}

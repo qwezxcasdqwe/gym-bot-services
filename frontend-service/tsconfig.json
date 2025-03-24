@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,  // Включаем поддержку default импорта
+    "moduleResolution": "node",  // Указываем разрешение модулей через Node.js
+    "resolveJsonModule": true,  // Позволяет импортировать JSON-файлы как модули
+    "jsx": "react-jsx",  // Используем новый JSX трансформер для React 17+
+    "strict": true,  // Включаем строгую типизацию
+    "skipLibCheck": true,  // Пропускаем проверку типов в библиотеках
+    "module": "esnext",  // Используем ESNext модули
+    "target": "es5",  // Устанавливаем целевую версию JavaScript (подходит для старых браузеров)
+    "lib": ["dom", "dom.iterable", "esnext"]  // Определяем используемые библиотеки
+  },
+  "include": ["src"]  // Указываем папку с исходниками
+}
