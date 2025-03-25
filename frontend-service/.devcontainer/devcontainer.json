@@ -1,10 +1,10 @@
 {
   "name": "React Frontend Container",
-  "dockerFile": "../Dockerfile",
+  "dockerFile": "../Dockerfile.dev",
+  "dockerComposeFile": ["../../docker-compose.yml"],
   "context": "..",
-  "service": "frontend",
-  "workspaceMount": "source=${localWorkspaceFolder}/frontend,target=/app,type=bind",
   "workspaceFolder": "/app",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
   "settings": {
     "terminal.integrated.defaultProfile.linux": "bash",
     "editor.formatOnSave": true
@@ -14,4 +14,5 @@
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next"
   ],
+  "postCreateCommand": "npm install"
 }
