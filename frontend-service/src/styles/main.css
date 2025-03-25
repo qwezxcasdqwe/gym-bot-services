@@ -1,0 +1,59 @@
+/* Стили для контейнера страницы */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Стили для основного контейнера */
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+/* Заголовок */
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+/* Стили для списка продуктов */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Стили для каждого элемента списка */
+li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для названия и категории продукта */
+.product-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.product-category {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Стили для цены продукта */
+.product-price {
+  font-size: 16px;
+  color: #2c7d2f;
+  font-weight: bold;
+}
