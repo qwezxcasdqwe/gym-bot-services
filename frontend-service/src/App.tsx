@@ -1,41 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import AddProduct from './components/AddProduct';
 import './styles/main.css';
-
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-}
+import CategoryPage from './components/CategoryPage';
 
 const App = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  // Получаем данные о продуктах с бэкенда с использованием fetch
-  useEffect(() => {
-    fetch('http://127.0.0.1:5000/products')  // Примерный адрес API
-      .then((response) => response.json())
-      .then((data: Product[]) => {
-        setProducts(data); 
-      })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
-      });
-  }, []);
-
   return (
-    <div className="container">
-      <h1>Sports Nutrition Products</h1>
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            <div>
-              <div className="product-name">{product.name}</div>
-              <div className="product-category">{product.category}</div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+      <div className="container">
+        <header>
+          <h1>Sports Nutrition Store</h1>
+        </header>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 };
 
