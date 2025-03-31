@@ -65,6 +65,15 @@ public class GymBotApplication {
                 // Если база данных не существует, создаем ее
                 stmt.execute("CREATE DATABASE postgres;");
             }
+
+            try{
+                stmt.executeQuery("SELECT 1 FROM pg_database WHERE datname = 'test';");
+            }
+            catch (SQLException e) {
+                // Если база данных не существует, создаем ее
+                stmt.execute("CREATE DATABASE test;");
+            }
+
     
             String urlWithDb = "jdbc:postgresql://db:5432/postgres";
             try (Connection connDb = DriverManager.getConnection(urlWithDb, user, password);

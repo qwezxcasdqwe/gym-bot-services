@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
 import com.example.gymbot.Configurations.WebHookBot;
@@ -51,6 +52,11 @@ public class UserService {
    
   public UserEntity takeUserById(Long chatId){
     UserEntity user = userRepository.findById(chatId).orElse(null);
+    return user;
+  }
+
+  public Optional<UserEntity> findUserByIdService(Long chatid){
+    Optional<UserEntity> user = userRepository.findById(chatid);
     return user;
   }
 }

@@ -1,8 +1,10 @@
 package com.example.gymbot.Services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,7 +14,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 public class KeyMenu {
+
+      
+  @Value("${website.url}")
+  private String webSiteUrl;
   public SendMessage sendMainMenu(long chatId){
+
     SendMessage message = new SendMessage();
     message.setChatId(chatId);
     message.setText("Что вы хотите сделать дальше?");
@@ -67,6 +74,23 @@ public class KeyMenu {
     message.setReplyMarkup(keyboardMarkup);
     
     return message;
+}
+
+public SendMessage sendRedirectMessage(Long chatid){
+  SendMessage message = new SendMessage();
+  message.setChatId(chatid);
+  message.setText("Перейдите на сайт для подобора спортивного питания");
+
+  InlineKeyboardButton siteButton = new InlineKeyboardButton();
+  siteButton.setText("Перейти на сайт");
+  siteButton.setUrl(webSiteUrl);
+
+  InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+  markup.setKeyboard(Collections.singletonList(Collections.singletonList(siteButton)));
+  
+  message.setReplyMarkup(markup);
+
+  return message;
 }
   
 }

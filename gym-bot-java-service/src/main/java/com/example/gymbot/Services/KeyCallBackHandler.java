@@ -19,12 +19,14 @@ import com.example.gymbot.Repositories.UserRepository;
 public class KeyCallBackHandler {
   private WebHookBot botConfig;
   private UserService userService;
+  private KeyMenu keyMenu;
   private  static final Logger log = LoggerFactory.getLogger(KeyCallBackHandler.class);
 
     @Autowired
-    public  KeyCallBackHandler(WebHookBot botConfig, UserService userService) {
+    public  KeyCallBackHandler(WebHookBot botConfig, UserService userService, KeyMenu keyMenu) {
         this.botConfig = botConfig;
         this.userService = userService;
+        this.keyMenu = keyMenu;
     }
 
   public void mainChoiseHandler(Update update, String callbackData, long chatId) {
@@ -50,7 +52,7 @@ public class KeyCallBackHandler {
 
         case "choose_supplements":
             log.info("Пользователь выбрал спортивное питание, чат: " + chatId);
-            botConfig.sendMessage(chatId, "Отлично! Сейчас подберем вам спортивное питание...");
+            botConfig.executeForOtherServices(keyMenu.sendRedirectMessage(chatId));
             break;
 
 

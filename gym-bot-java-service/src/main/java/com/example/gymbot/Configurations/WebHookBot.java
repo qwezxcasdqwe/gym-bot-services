@@ -197,7 +197,7 @@ public void onUpdateReceived(Update update) {
         execute(message);
     }
     catch(TelegramApiException e){
-        log.info("Ошибка отправки сообщения дополнительного сервиса");
+        log.info("Ошибка отправки сообщения дополнительного сервиса " + e.toString());
     }
   }
 
