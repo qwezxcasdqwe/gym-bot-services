@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import com.example.gymbot.Entities.UserEntity;
 import com.example.gymbot.Entities.UserInfo;
+import com.example.gymbot.Kafka.KafkaProducerService;
 import com.example.gymbot.Services.Asker;
 import com.example.gymbot.Services.Calories;
 import com.example.gymbot.Services.KeyCallBackHandler;
@@ -44,16 +45,18 @@ public class WebHookBot extends TelegramLongPollingBot{
   private final KeyCallBackHandler keyCallBackHandler;
   private final UserService userService;
   private final FoodMenuHandler menuHandler;
+  private final KafkaProducerService kafkaProducerService;
 
   @SuppressWarnings("deprecation")
   @Autowired
-  public WebHookBot(@Lazy Asker asker,@Lazy Calories caloriesService,KeyMenu menu, @Lazy KeyCallBackHandler keyCallBackHandler,UserService userService,@Lazy FoodMenuHandler menuHandler) { // Lazy загрузка, чтобы избежать цикла
+  public WebHookBot(@Lazy Asker asker,@Lazy Calories caloriesService,KeyMenu menu, @Lazy KeyCallBackHandler keyCallBackHandler,UserService userService,@Lazy FoodMenuHandler menuHandler,KafkaProducerService kafkaProducerService) { // Lazy загрузка, чтобы избежать цикла
       this.asker = asker;
       this.caloriesService=caloriesService;
       this.menu=menu;
       this.keyCallBackHandler=keyCallBackHandler;
       this.userService=userService;
       this.menuHandler=menuHandler;
+      this.kafkaProducerService=kafkaProducerService;
   }
 
   private static final Logger log = LoggerFactory.getLogger(WebHookBot.class);
@@ -75,8 +78,9 @@ public class WebHookBot extends TelegramLongPollingBot{
   }
 
   @Override
-public void onUpdateReceived(Update update) {
+ public void onUpdateReceived(Update update) {
     if (update.hasMessage() && update.getMessage() != null) {
+        kafkaProducerService.sendJsonLog("Получено текстовое сообщение", update.getMessage().getChatId());
         log.info("получено текст сообщение");
         Message message = update.getMessage();
         if (message.hasText()) {
@@ -84,6 +88,7 @@ public void onUpdateReceived(Update update) {
             long chatId = message.getChatId();
             if (messageText.equals("/start")) {
                 log.info("Сообщение /start получено от чата " + chatId);
+                kafkaProducerService.sendJsonLog("получено стартовое сообщение от пользователя+", chatId);
                 userInfoMap.put(chatId, new UserInfo());
                 userStepMap.put(chatId, 1);
 
@@ -95,6 +100,7 @@ public void onUpdateReceived(Update update) {
                     execute(helloMessage);
                     asker.askQuestion(chatId, 1);
                 } catch (TelegramApiException e) {
+                    kafkaProducerService.sendJsonError("Ошибка отправки сообщения через api", chatId, (long) 5);
                     log.error("Ошибка отправки сообщения пользователю " + chatId, e);
                 }
             } else {
@@ -104,6 +110,7 @@ public void onUpdateReceived(Update update) {
             }
             if(messageText.equals("Дефицит") || messageText.equals("Профицит") || messageText.equals("Поддержка веса") || messageText.equals("Вернуться назад")){
                   log.info("Пользователь выбрал тип меню " + chatId);
+                  kafkaProducerService.sendJsonLog("пользователь выбрал тип меню " + messageText, chatId);
                   UserEntity user = userService.takeUserById(chatId);
                   if(user==null){
                   sendMessage(chatId, errorUserFinding);
@@ -113,7 +120,8 @@ public void onUpdateReceived(Update update) {
             }
          }
         }
-    }  if (update.hasCallbackQuery()) { // Обработка callback-запроса
+    }  if (update.hasCallbackQuery()) { // Обработка callback-запроса\
+        kafkaProducerService.sendJsonLog("callback сообщение от пользователя", update.getMessage().getChatId());
         log.info("получено callback сообщение");
         CallbackQuery callbackQuery = update.getCallbackQuery();
         String callbackData = callbackQuery.getData();
@@ -125,7 +133,9 @@ public void onUpdateReceived(Update update) {
             catch(Exception e){log.info(e.toString());}
             
         } else {
+            kafkaProducerService.sendJsonError("Ошибка пустого колбэка", callbackQuery.getFrom().getId(), (long) 2);
             log.warn("Получен пустой callbackData от чата " + callbackQuery.getFrom().getId());
+            kafkaProducerService.sendJsonLog("получен пустой callback ", callbackQuery.getFrom().getId());
         }
     }
 }
@@ -141,6 +151,7 @@ public void onUpdateReceived(Update update) {
             userStepMap.put(chatId, 2);  // Переходим ко второму вопросу
             asker.askQuestion(chatId, 2);  // Задаем второй вопрос
         } catch (NumberFormatException e) {
+            kafkaProducerService.sendJsonError("данные введены не корректно", chatId, (long) 1);
             sendMessage(chatId, "Пожалуйста, введите ваш возраст числом.");
         }
     } else if (step == 2) {  // Вопрос 2: Вес
@@ -149,6 +160,7 @@ public void onUpdateReceived(Update update) {
             userStepMap.put(chatId, 3);  // Переходим к третьему вопросу
             asker.askQuestion(chatId, 3);  // Задаем третий вопрос
         } catch (NumberFormatException e) {
+            kafkaProducerService.sendJsonError("данные введены не корректно", chatId, (long) 1);
             sendMessage(chatId, "Пожалуйста, введите ваш вес числом.");
         }
     } else if (step == 3) {  // Вопрос 3: Рост
@@ -159,6 +171,7 @@ public void onUpdateReceived(Update update) {
             caloriesService.calculateCalories(userInfo, chatId);  // Подсчитаем калории
             userInfo.setCalorieNorm(caloriesService.caloriesReturner(userInfo, chatId));
             log.info("Собраны данные для сохранения пользователя " + chatId );
+            kafkaProducerService.sendJsonLog("закончен сбор данных для пользователя", chatId);
             userService.saveUserData(chatId, userInfo.getAge(), userInfo.getWeight(), userInfo.getHeight(), userInfo.getCalorieNorm());
             SendMessage menuMessage = menu.sendMainMenu(chatId);//Отправляем наше основное меню
             try{

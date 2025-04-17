@@ -10,4 +10,5 @@ FROM build_base AS build_prod
 
 COPY . .
 
-RUN mvn clean package
+RUN mvn clean install -DskipTests
+

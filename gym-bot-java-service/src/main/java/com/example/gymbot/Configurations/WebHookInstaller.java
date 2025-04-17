@@ -18,7 +18,7 @@ public class WebHookInstaller {
   //   this.webHookUrl=webHookUrl;
   // }
 
-  private String webHookUrl="https://qfs8lz-91-224-99-241.ru.tuna.am/webhook";
+  private String webHookUrl="https://c136f762dfb997.lhr.life/webhook";
 
   public WebHookInstaller(@Value("${telegram.bot.token}") String botToken){
     this.botToken=botToken;

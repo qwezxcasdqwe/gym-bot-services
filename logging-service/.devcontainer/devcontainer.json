@@ -1,7 +1,7 @@
 {
   "name": "log-service",
   "dockerComposeFile": ["../../docker-compose.yml"],
-  "service": "log-service",
+  "service": "logservice",
   "workspaceFolder": "/app",
   "shutdownAction": "stopCompose",
   "customizations": {
