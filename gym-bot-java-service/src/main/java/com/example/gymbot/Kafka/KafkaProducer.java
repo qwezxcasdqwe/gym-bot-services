@@ -35,7 +35,17 @@ public class KafkaProducer {
   @Bean
   public NewTopic chatId(){
     return new NewTopic("chat_id", 1,(short) 1);
-  } 
+  }
+  
+  @Bean
+  public NewTopic JsonLog(){
+    return new NewTopic("json_log", 1,(short) 1);
+  }
+
+  @Bean
+  public NewTopic JsonError(){
+    return new NewTopic("error_log", 1,(short) 1);
+  }
   
   @Bean
   public ConsumerFactory<String, Long> longConsumerFactory() {
@@ -108,11 +118,5 @@ public ProducerFactory<String, String> stringProducerFactory() {
     producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);  // Сериализатор для ключа типа String
     return new DefaultKafkaProducerFactory<>(producerProps);
 }
-
-
-
-
-
-
 
 }
